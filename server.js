@@ -1,12 +1,24 @@
 const colors = require('colors')
 const express = require('express')
+const dotenv = require('dotenv')
+const cookieParser = require('cookie-parser')
+const connectDB = require('./config/db')
 const errorHandler = require('./middleware/error')
 
 const users = require('./routes/users')
 const auth = require('./routes/auth')
 const contacts  = require('./routes/contacts')
 
+dotenv.config({
+    path: './config/config.env'
+})
+
+connectDB()
+
 const app = express()
+
+app.use(express.json())
+app.use(cookieParser())
 
 // Define Routes
 app.use('/api/users', users)
@@ -20,6 +32,16 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`.cyan.bold);
+})
+
+
+process.on('unhandledRejection', (err, promise) => {
+    console.log(
+        'Error: Unhandled Rejection',
+        '\n',
+        `Error Message: ${err.message}`.red.underline.bold)
+
+        server.close(() => process.exit(1))
 })
