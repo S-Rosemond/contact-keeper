@@ -4,6 +4,8 @@ const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
 const errorHandler = require('./middleware/error')
+const hpp = require('hpp')
+const limiter = require('./utils/rateLimiter')
 
 const users = require('./routes/users')
 const auth = require('./routes/auth')
@@ -19,6 +21,8 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(hpp())
+app.use(limiter())
 
 // Define Routes
 app.use('/api/users', users)

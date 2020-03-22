@@ -1,0 +1,1 @@
+exports.loginRateLimitMsg = 'Warning: Your account will be locked after 5 failed attempts'
