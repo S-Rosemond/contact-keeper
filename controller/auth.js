@@ -14,8 +14,6 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 	const notValidCreds = checkFields(email, password);
 
-	console.log(notValidCreds[0]);
-
 	if (notValidCreds[0]) {
 		return next(new ErrorResponse(notValidCreds[1], 400));
 	}
@@ -39,5 +37,24 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @route   GET api/auth
 // @access  Private
 exports.getLoggedUser = asyncHandler(async (req, res, next) => {
-	res.send('get logged in user');
+	const user = await User.findById(req.user.id);
+
+	res.status(200).json({
+		success: true,
+		data: user
+	});
+});
+
+// @desc    Get Logged In User
+// @route   GET api/auth
+// @access  Private
+exports.logout = asyncHandler(async (req, res, next) => {
+	res.cookie('contact_keeper', '', {
+		expires: new Date(Date.now() + 2 * 1000),
+		httpOnly: true
+	});
+
+	res.status(200).json({
+		success: true
+	});
 });
