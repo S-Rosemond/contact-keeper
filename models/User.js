@@ -91,7 +91,7 @@ UserSchema.methods.addContact = async function(newContact) {
 	return createdContact;
 };
 
-// Update contact working | next test correct doc only updated
+// Update contact working correctly | req doc only updated
 UserSchema.methods.updateContact = async function(id, update) {
 	const contact = await this.contacts.id(id);
 	await contact.set(update);
