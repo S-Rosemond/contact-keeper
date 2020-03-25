@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
 
 	// Duplicate key error
 	if (err.code === 11000) {
-		const message = 'Bad Request.';
+		const message = 'Bad Request. Duplicate Entry.';
 
 		error = new ErrorResponse(message, 400);
 	}

@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
-const ContactSchema = new mongoose.Schema({
-	user: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'users'
-	},
+exports.ContactSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: [ true, 'The name field is required' ]
@@ -30,5 +26,3 @@ const ContactSchema = new mongoose.Schema({
 		default: Date.now
 	}
 });
-
-module.exports = mongoose.model('Contact', ContactSchema);

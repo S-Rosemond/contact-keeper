@@ -1,12 +1,14 @@
 const asyncHandler = require('../middleware/asyncHandler');
-const Contact = require('../models/Contact');
+const User = require('../models/User');
 const ErrorResponse = require('../utils/ErrorResponse');
+const checkEmail = require('../utils/checkEmail');
 
 // @desc    Get all users contacts
 // @route   GET api/contacts
 // @access  Private
 exports.getContacts = asyncHandler(async (req, res, next) => {
-	const contacts = await Contact.find({ user: req.user.id }).sort({ date: -1 });
+	const user = await User.findById(req.user.id);
+	const contacts = user.contacts;
 
 	res.status(200).json({
 		success: true,
@@ -18,22 +20,21 @@ exports.getContacts = asyncHandler(async (req, res, next) => {
 // @route   POST api/contacts
 // @access  Private
 exports.addContact = asyncHandler(async (req, res, next) => {
-	let { name, email, phone, cellphone, type } = req.body;
+	let { email } = req.body;
 
-	let contact = await Contact.find({ email });
+	const user = await User.findById(req.user.id);
+	//let contactExist = checkEmail(email, user.contacts)
+	// replaced by user.checkEmail rm later
 
-	if (contact[0].email === email) {
+	let contactExist = await user.checkEmail(email);
+
+	if (contactExist) {
 		return next(new ErrorResponse('A contact with this email already exist.'));
 	}
 
-	contact = await Contact.create({
-		name,
-		email,
-		phone,
-		cellphone,
-		type,
-		user: req.user.id
-	});
+	const newContact = { ...req.body };
+
+	const contact = await user.addContact(newContact);
 
 	res.status(200).json({
 		success: true,
