@@ -56,7 +56,7 @@ UserSchema.methods.matchPassword = async function(userPassword) {
 	return await argon2.verify(this.password, userPassword);
 };
 
-// Needs Testing
+// Check contact email in use
 UserSchema.methods.checkEmail = async function(email) {
 	let result = false;
 	this.contacts.forEach((el) => {
@@ -66,8 +66,15 @@ UserSchema.methods.checkEmail = async function(email) {
 	return result;
 };
 
+// Needs Testing
 UserSchema.methods.getContact = async function(id) {
-	let contact = this.contacts.filter((el) => el.id === id);
+	/* Alternate version:
+	const contact = this.contacts.filter((el) => el.id === id);
+
+	return: filtered array vs below contact obj   
+	*/
+
+	const contact = await this.contacts.id(id);
 
 	return contact;
 };
@@ -77,16 +84,26 @@ UserSchema.methods.addContact = async function(newContact) {
 	await this.save();
 
 	/* 
-	Since the user is adding and viewing contacts no security issue, one issue is passing an empty value, that can be short circuited 
+	Since the user is adding and viewing contacts no security issue, one issue is passing an empty value, that can be short circuited with pkg
 	*/
 	const createdContact = await this.contacts[this.contacts.length - 1];
 	return createdContact;
 };
 
 UserSchema.methods.removeContact = async function(id) {
-	let removed = this.contacts.pull(id);
-	removed.remove();
-	this.save();
+	/* Alt versions: v1 is ok
+	const removed = await this.getContact(id); 
+	
+	 Good ref for what not to do:
+	
+	const removed = await this.contacts.pull(id); 
+	
+	working but pull array with all contacts if id doesn't exist. However, deletes contact with correct id 
+	*/
+	const removed = await this.contacts.id(id);
+
+	await removed.remove();
+	await this.save();
 };
 
 module.exports = mongoose.model('User', UserSchema);

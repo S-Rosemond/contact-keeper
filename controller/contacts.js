@@ -1,7 +1,7 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/ErrorResponse');
-const checkEmail = require('../utils/checkEmail');
+const sendResponse = require('../utils/sendResponse');
 
 // @desc    Get all users contacts
 // @route   GET api/contacts
@@ -10,10 +10,7 @@ exports.getContacts = asyncHandler(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
 	const contacts = user.contacts;
 
-	res.status(200).json({
-		success: true,
-		data: contacts
-	});
+	sendResponse(res, contacts);
 });
 
 // @desc    Add new contact
@@ -23,8 +20,6 @@ exports.addContact = asyncHandler(async (req, res, next) => {
 	let { email } = req.body;
 
 	const user = await User.findById(req.user.id);
-	//let contactExist = checkEmail(email, user.contacts)
-	// replaced by user.checkEmail rm later
 
 	let contactExist = await user.checkEmail(email);
 
@@ -36,10 +31,7 @@ exports.addContact = asyncHandler(async (req, res, next) => {
 
 	const contact = await user.addContact(newContact);
 
-	res.status(200).json({
-		success: true,
-		data: contact
-	});
+	sendResponse(res, contact);
 });
 
 // @desc    Update new contact
@@ -53,5 +45,9 @@ exports.updateContact = asyncHandler(async (req, res, next) => {
 // @route   DELETE api/contacts/:id
 // @access  Private
 exports.deleteContact = asyncHandler(async (req, res, next) => {
-	res.send('delete contact');
+	const user = await User.findById(req.user.id);
+
+	await user.removeContact(req.params.id);
+
+	sendResponse(res);
 });
