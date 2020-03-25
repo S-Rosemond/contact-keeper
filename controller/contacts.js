@@ -37,9 +37,10 @@ exports.addContact = asyncHandler(async (req, res, next) => {
 // @desc    Update new contact
 // @route   PUT api/contacts/:id
 // @access  Private
+// note: Frontend edit button calls this, update calls upddateContact
 exports.getContact = asyncHandler(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
-	const contact = await user.getContact(req.params.id);
+	const contact = await user.getContact(req.params.id, [ 'dateCreated' ]);
 
 	sendResponse(res, contact);
 });
@@ -48,11 +49,10 @@ exports.getContact = asyncHandler(async (req, res, next) => {
 // @route   PUT api/contacts/:id
 // @access  Private
 exports.updateContact = asyncHandler(async (req, res, next) => {
-	let update;
 	const user = await User.findById(req.user.id);
-	const contact = user.getContact(req.params.id);
+	const contact = await user.updateContact(req.params.id, req.body);
 
-	update = { ...contact };
+	sendResponse(res, contact);
 });
 
 // @desc    Delete a contact

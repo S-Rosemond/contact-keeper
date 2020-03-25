@@ -66,7 +66,7 @@ UserSchema.methods.checkEmail = async function(email) {
 	return result;
 };
 
-// Needs Testing
+// Get single contact
 UserSchema.methods.getContact = async function(id) {
 	/* Alternate version:
 	const contact = this.contacts.filter((el) => el.id === id);
@@ -79,6 +79,7 @@ UserSchema.methods.getContact = async function(id) {
 	return contact;
 };
 
+// Add a contact
 UserSchema.methods.addContact = async function(newContact) {
 	await this.contacts.push(newContact);
 	await this.save();
@@ -90,6 +91,16 @@ UserSchema.methods.addContact = async function(newContact) {
 	return createdContact;
 };
 
+// Update contact working | next test correct doc only updated
+UserSchema.methods.updateContact = async function(id, update) {
+	const contact = await this.contacts.id(id);
+	await contact.set(update);
+	this.save();
+
+	return contact;
+};
+
+// Delete a contact
 UserSchema.methods.removeContact = async function(id) {
 	/* Alt versions: v1 is ok
 	const removed = await this.getContact(id); 
