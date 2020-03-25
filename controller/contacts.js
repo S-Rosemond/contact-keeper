@@ -37,8 +37,22 @@ exports.addContact = asyncHandler(async (req, res, next) => {
 // @desc    Update new contact
 // @route   PUT api/contacts/:id
 // @access  Private
+exports.getContact = asyncHandler(async (req, res, next) => {
+	const user = await User.findById(req.user.id);
+	const contact = await user.getContact(req.params.id);
+
+	sendResponse(res, contact);
+});
+
+// @desc    Update new contact
+// @route   PUT api/contacts/:id
+// @access  Private
 exports.updateContact = asyncHandler(async (req, res, next) => {
-	res.send('update contact');
+	let update;
+	const user = await User.findById(req.user.id);
+	const contact = user.getContact(req.params.id);
+
+	update = { ...contact };
 });
 
 // @desc    Delete a contact
