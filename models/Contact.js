@@ -7,8 +7,7 @@ exports.ContactSchema = new mongoose.Schema({
 	},
 	email: {
 		type: String,
-		required: [ true, 'An email is required for all contacts' ],
-		unique: true
+		required: [ true, 'An email is required for all contacts' ]
 	},
 	phone: {
 		type: String

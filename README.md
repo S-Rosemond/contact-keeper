@@ -29,3 +29,5 @@ npm run client  # React Client Only :3000
 ## Uses Argon2 instead of Bcryptjs
 
 Argon2 installation [guide](https://www.npmjs.com/package/argon2 "argon2 npm")
+
+code refactored more closely to Brad's Node masterclass course. Some functions/functionality are taken directly from that course. 

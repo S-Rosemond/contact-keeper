@@ -1,0 +1,11 @@
+.spinner {
+	width: 12.5rem;
+	margin: auto;
+	display: block;
+}
+
+.user-style {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 1rem;
+}
