@@ -2,10 +2,13 @@ const colors = require('colors')
 const express = require('express')
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
-const connectDB = require('./config/db')
-const errorHandler = require('./middleware/error')
+const helmet = require('helmet')
 const hpp = require('hpp')
 const limiter = require('./utils/rateLimiter')
+const mongoSanitize = require('express-mongo-sanitize')
+const xss = require('xss-clean')
+const errorHandler = require('./middleware/error')
+const connectDB = require('./config/db')
 
 const users = require('./routes/users')
 const auth = require('./routes/auth')
@@ -21,8 +24,13 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(helmet())
 app.use(hpp())
 app.use(limiter())
+app.use(mongoSanitize())
+app.use(xss())
+
+
 
 // Define Routes
 app.use('/api/users', users)
