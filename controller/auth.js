@@ -12,10 +12,11 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 	password = password.toString();
 
-	const notValidCreds = checkFields(email, password);
+	// Finally added a spell checker therefore renaming
+	const nonValidCredential = checkFields(email, password);
 
-	if (notValidCreds[0]) {
-		return next(new ErrorResponse(notValidCreds[1], 400));
+	if (nonValidCredential[0]) {
+		return next(new ErrorResponse(nonValidCredential[1], 400));
 	}
 
 	const user = await User.findOne({ email }).select('+password');
