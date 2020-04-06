@@ -95,7 +95,7 @@ UserSchema.methods.addContact = async function(newContact) {
 UserSchema.methods.updateContact = async function(id, update) {
 	const contact = await this.contacts.id(id);
 	await contact.set(update);
-	this.save();
+	await this.save();
 
 	return contact;
 };
