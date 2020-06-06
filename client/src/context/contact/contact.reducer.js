@@ -18,7 +18,7 @@ function ContactReducer(state, { type, payload }) {
     case DELETE_CONTACT:
       return {
         ...state,
-        contacts: payload,
+        contacts: state.contacts.filter((contact) => contact.id !== payload),
       };
     case SET_CURRENT:
       return {

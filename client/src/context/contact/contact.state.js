@@ -28,7 +28,7 @@ function ContactState(props) {
   };
 
   //    Delete Contact
-  const deleteContact = () => dispatch();
+  const deleteContact = (id) => dispatch({ type: DELETE_CONTACT, payload: id });
 
   //    Set Contact
   const setContact = () => dispatch();
@@ -50,6 +50,7 @@ function ContactState(props) {
       value={{
         contacts: state.contacts,
         addContact,
+        deleteContact,
       }}
     >
       {props.children}
