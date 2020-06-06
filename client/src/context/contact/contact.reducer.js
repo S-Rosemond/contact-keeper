@@ -8,12 +8,12 @@ import {
   CLEAR_FILTER,
 } from './../types';
 
-function ContactReducer(state, { action: { type, payload } }) {
+function ContactReducer(state, { type, payload }) {
   switch (type) {
     case ADD_CONTACT:
       return {
         ...state,
-        contacts: payload,
+        contacts: [...state.contacts, payload],
       };
     case DELETE_CONTACT:
       return {
