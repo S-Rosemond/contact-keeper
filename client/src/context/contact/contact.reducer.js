@@ -9,6 +9,7 @@ import {
 } from './../types';
 
 function ContactReducer(state, { type, payload }) {
+  console.log(payload);
   switch (type) {
     case ADD_CONTACT:
       return {
@@ -23,12 +24,17 @@ function ContactReducer(state, { type, payload }) {
     case SET_CURRENT:
       return {
         ...state,
-        contacts: payload,
+        current: payload,
       };
     case CLEAR_CURRENT:
-      return { ...state, payload };
+      return { ...state, current: null };
     case UPDATE_CONTACT:
-      return { ...state, payload };
+      return {
+        ...state,
+        contacts: state.contacts.map((contact) =>
+          contact.id === payload.id ? Object.assign(contact, payload) : contact
+        ),
+      };
     case FILTER_CONTACTS:
       return { ...state, payload };
     case CLEAR_FILTER:

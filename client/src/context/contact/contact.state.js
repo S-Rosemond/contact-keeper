@@ -16,6 +16,7 @@ import contactArray from './contact.temp';
 function ContactState(props) {
   const initialState = {
     contacts: contactArray,
+    current: null,
   };
 
   const [state, dispatch] = useReducer(ContactReducer, initialState);
@@ -30,14 +31,16 @@ function ContactState(props) {
   //    Delete Contact
   const deleteContact = (id) => dispatch({ type: DELETE_CONTACT, payload: id });
 
-  //    Set Contact
-  const setContact = () => dispatch();
+  //    Set Current Contact
+  const setCurrent = (contact) =>
+    dispatch({ type: SET_CURRENT, payload: contact });
 
-  //    Clear Contact
-  const clearContact = () => dispatch();
+  //    Clear Current Contact
+  const clearCurrent = () => dispatch({ type: CLEAR_CURRENT });
 
   //   Update Contact
-  const updateContact = () => dispatch();
+  const updateContact = (contact) =>
+    dispatch({ type: UPDATE_CONTACT, payload: contact });
 
   //    Filter Contact
   const filterContact = () => dispatch();
@@ -49,8 +52,12 @@ function ContactState(props) {
     <ContactContext.Provider
       value={{
         contacts: state.contacts,
+        current: state.current,
         addContact,
         deleteContact,
+        setCurrent,
+        clearCurrent,
+        updateContact,
       }}
     >
       {props.children}
