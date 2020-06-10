@@ -3,7 +3,13 @@ import ContactContext from './../../context/contact/contact.context';
 
 const ContactForm = () => {
   const contactContext = useContext(ContactContext);
-  const { addContact, current, clearCurrent, updateContact } = contactContext;
+  const {
+    addContact,
+    current,
+    clearCurrent,
+    updateContact,
+    inputRef,
+  } = contactContext;
 
   const initialState = {
     name: '',
@@ -49,6 +55,7 @@ const ContactForm = () => {
         name='name'
         value={name}
         onChange={onChange}
+        ref={inputRef}
       />
       <label htmlFor='email'>Email</label>
       <input

@@ -36,9 +36,17 @@ function ContactReducer(state, { type, payload }) {
         ),
       };
     case FILTER_CONTACTS:
-      return { ...state, payload };
+      return {
+        ...state,
+
+        filtered: state.contacts.filter((contact) => {
+          const regex = new RegExp(`${payload}`, 'gi');
+
+          return contact.name.match(regex) || contact.email.match(regex);
+        }),
+      };
     case CLEAR_FILTER:
-      return { ...state, payload };
+      return { ...state, filtered: null };
     default:
       return state;
   }

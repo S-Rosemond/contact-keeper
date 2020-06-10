@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { v4 } from 'uuid';
 import ContactContext from './contact.context';
 import ContactReducer from './contact.reducer';
@@ -17,9 +17,12 @@ function ContactState(props) {
   const initialState = {
     contacts: contactArray,
     current: null,
+    filtered: null,
   };
 
   const [state, dispatch] = useReducer(ContactReducer, initialState);
+
+  const inputRef = useRef();
 
   //    Add Contact
   const addContact = (contact) => {
@@ -32,8 +35,11 @@ function ContactState(props) {
   const deleteContact = (id) => dispatch({ type: DELETE_CONTACT, payload: id });
 
   //    Set Current Contact
-  const setCurrent = (contact) =>
+  const setCurrent = (contact) => {
     dispatch({ type: SET_CURRENT, payload: contact });
+
+    inputRef.current.focus();
+  };
 
   //    Clear Current Contact
   const clearCurrent = () => dispatch({ type: CLEAR_CURRENT });
@@ -42,22 +48,29 @@ function ContactState(props) {
   const updateContact = (contact) =>
     dispatch({ type: UPDATE_CONTACT, payload: contact });
 
+  // ------------------------------------------------------------
+
   //    Filter Contact
-  const filterContact = () => dispatch();
+  const filterContact = (text) =>
+    dispatch({ type: FILTER_CONTACTS, payload: text });
 
   //   Clear Filter
-  const clearFilter = () => dispatch();
+  const clearFilter = () => dispatch({ type: CLEAR_FILTER });
 
   return (
     <ContactContext.Provider
       value={{
         contacts: state.contacts,
         current: state.current,
+        filtered: state.filtered,
         addContact,
         deleteContact,
         setCurrent,
         clearCurrent,
         updateContact,
+        filterContact,
+        clearFilter,
+        inputRef,
       }}
     >
       {props.children}
