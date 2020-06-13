@@ -15,16 +15,25 @@ export default function AlertState(props) {
 
     dispatch({ type: SET_ALERT, payload: { msg, type, id } });
 
-    setTimeout(() => (removeAlert(id), timeout));
+    setTimeout(() => removeAlert(id), timeout);
   };
 
   const removeAlert = (id) => dispatch({ type: REMOVE_ALERT, payload: id });
+
+  const validateEmail = (email) => {
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (!emailRegex.test(email) && email !== '') {
+      setAlert('Please use a valid email format', 'danger');
+    }
+  };
 
   return (
     <AlertContext.Provider
       value={{
         alerts: state,
         setAlert,
+        validateEmail,
       }}
     >
       {props.children}

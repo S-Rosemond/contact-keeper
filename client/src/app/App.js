@@ -1,6 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Navbar, Home, About, Register, Login } from '../components/index';
+import {
+  Navbar,
+  Home,
+  About,
+  Register,
+  Login,
+  Alerts,
+} from '../components/index';
 import ContactState from './../context/contact/contact.state';
 import AuthState from '../context/auth/auth.state';
 import AlertState from './../context/alert/alert.state';
@@ -14,6 +21,7 @@ const App = () => {
             <React.Fragment>
               <Navbar />
               <div className='container'>
+                <Alerts />
                 <Switch>
                   <Route exact path='/' component={Home} />
                   <Route exact path='/about' component={About} />

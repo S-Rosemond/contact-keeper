@@ -1,6 +1,10 @@
 import React from 'react';
+import AlertContext from './../../context/alert/alert.context';
 
 const Login = () => {
+  const alertContext = React.useContext(AlertContext);
+  const { setAlert, validateEmail } = alertContext;
+
   const [user, setUser] = React.useState({
     email: '',
     password: '',
@@ -22,7 +26,14 @@ const Login = () => {
       <form onSubmit={onSubmit}>
         <div className='form-group'>
           <label htmlFor='email'>Email Address</label>
-          <input type='email' name='email' value={email} onChange={onChange} />
+          <input
+            type='email'
+            name='email'
+            value={email}
+            onChange={onChange}
+            onBlur={validateEmail.bind(null, email)}
+            required
+          />
 
           <label htmlFor='password'>Password</label>
           <input

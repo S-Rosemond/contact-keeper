@@ -1,6 +1,10 @@
 import React from 'react';
+import AlertContext from './../../context/alert/alert.context';
 
 const Register = () => {
+  const alertContext = React.useContext(AlertContext);
+  const { setAlert, validateEmail } = alertContext;
+
   const [user, setUser] = React.useState({
     name: '',
     email: '',
@@ -14,6 +18,12 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (name === '' || email === '' || password === '') {
+      setAlert('Please enter all required fields', 'danger');
+    } else if (password !== password2) {
+      setAlert('Passwords do not match', 'danger');
+    }
   };
 
   return (
@@ -24,10 +34,23 @@ const Register = () => {
       <form onSubmit={onSubmit}>
         <div className='form-group'>
           <label htmlFor='name'>Name</label>
-          <input type='text' name='name' value={name} onChange={onChange} />
+          <input
+            type='text'
+            name='name'
+            value={name}
+            onChange={onChange}
+            required
+          />
 
           <label htmlFor='email'>Email Address</label>
-          <input type='email' name='email' value={email} onChange={onChange} />
+          <input
+            type='email'
+            name='email'
+            value={email}
+            onChange={onChange}
+            onBlur={validateEmail.bind(null, email)}
+            required
+          />
 
           <label htmlFor='password'>Password</label>
           <input
@@ -35,6 +58,8 @@ const Register = () => {
             name='password'
             value={password}
             onChange={onChange}
+            required
+            minLength='6'
           />
 
           <label htmlFor='password2'>Confirm Password</label>
@@ -43,6 +68,8 @@ const Register = () => {
             name='password2'
             value={password2}
             onChange={onChange}
+            required
+            minLength='6'
           />
         </div>
         <input
