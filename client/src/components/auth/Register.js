@@ -1,9 +1,20 @@
 import React from 'react';
 import AlertContext from './../../context/alert/alert.context';
+import AuthContext from '../../context/auth/auth.context';
 
 const Register = () => {
   const alertContext = React.useContext(AlertContext);
   const { setAlert, validateEmail } = alertContext;
+
+  const authContext = React.useContext(AuthContext);
+  const { registerUser, error, clearErrors } = authContext;
+
+  React.useEffect(() => {
+    if (error) {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+  }, [error]);
 
   const [user, setUser] = React.useState({
     name: '',
@@ -23,6 +34,8 @@ const Register = () => {
       setAlert('Please enter all required fields', 'danger');
     } else if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
+    } else {
+      registerUser({ name, email, password });
     }
   };
 
